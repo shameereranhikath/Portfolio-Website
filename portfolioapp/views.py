@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from .models import Contact
 
 # Create your views here.
 
@@ -16,5 +17,17 @@ def projects(request):
     return render(request,'project.html',context)
 
 def contact(request):
-    context={}
-    return render(request,'contact.html',context)
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        phone=request.POST['phone']
+        # print('ssssssss')
+        comments=request.POST['comments']
+        data=Contact(name=name,email=email,phone=phone,comment=comments)
+        data.save()
+        # print(comments)
+        return redirect('/')
+    else:
+        context={}
+        print('this is get')
+        return render(request,'contact.html',context)
